@@ -9,36 +9,48 @@ class GraphSearch {
      * @return
      */
     public static List<Node> search(Graph graph, boolean useQueue) {
+        int level = 0;
         Node start = graph.getStartNode();
         Node goal = graph.getGoalNode();
 
         Collection<Node> container = useQueue ? new LinkedList<>() : new Stack<>();
         Set<Node> visited = new HashSet<>();
         Map<Node, Node> parents = new HashMap<>();
+        Map<Node, Integer> levelMap = new HashMap<>();
 
         // Agregar el nodo inicial a la estructura de datos apropiada
         container.add(start);
+        levelMap.put(start, 0);
 
         while (!container.isEmpty()) {
             Node node = useQueue ? ((LinkedList<Node>) container).poll() : ((Stack<Node>) container).pop();
 
             if (node.equals(goal)) {
-                System.out.print(goal.getName());
+                System.out.println("Nivel y nodo de la respuesta es Nodo: " + node.getName() + ", Nivel: " + levelMap.get(node));
                 return getPath(start, goal, parents);
             }
 
             if (!visited.contains(node) && !node.isWall()) {
-                visited.add(node);
-                System.out.print(node.getName() +" , ");
 
+                visited.add(node);
+
+                //System.out.println("Nodo: " + node.getName() + ", Nivel: " + levelMap.get(node));
 
                 for (Node neighbor : node.getNeighborsWithoutHeuristics()) {
                     if (!visited.contains(neighbor) && !neighbor.isWall()) {
+
                         parents.put(neighbor, node);
                         container.add(neighbor);
+                        levelMap.put(neighbor, levelMap.get(node) + 1);
+
+                        // Condición de salida adicional
+                        if (levelMap.get(neighbor) > 100) {
+                            return null;
+                        }
                     }
                 }
             }
+
         }
 
         return null; // Camino no encontrado

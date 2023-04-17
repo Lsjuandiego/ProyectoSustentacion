@@ -5,6 +5,7 @@ class Node {
     private Node parent;
     private String value, name;
     private int row, col,cost;
+    private int nivel;
     private ArrayList<Node> neighbors;
     private boolean isStart, isGoal, isWall;
     private static final int UNIT_COST = 1; // Costo uniforme para todas las aristas
@@ -20,6 +21,7 @@ class Node {
         isGoal = value.equals("F");
         isWall = value.equals("R") || value.equals("M");
         this.cost = 0;
+        this.nivel = 0;
     }
 
     /**
@@ -42,6 +44,20 @@ class Node {
     }
     public void setName(String name){
         this.name = name;
+    }
+
+    public int getLevel() {
+        if (parent == null){
+            return 0;
+        }
+        this.nivel = this.parent.getLevel()+1;
+        return nivel;
+    }
+    public void setLevel(int nivel){
+        this.nivel = nivel;
+    }
+    public void setParent(Node parent){
+        this.parent = parent;
     }
     /**
      * Obtener la fila
@@ -72,6 +88,7 @@ class Node {
      * @return lista de vecinos
      */
     public ArrayList<Node> getNeighborsWithoutHeuristics() {
+
         ArrayList<Node> validNeighbors = new ArrayList<>();
         for (Node neighbor : neighbors) {
             int dx = Math.abs(neighbor.getRow() - this.getRow());
