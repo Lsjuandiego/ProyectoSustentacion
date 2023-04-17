@@ -14,6 +14,11 @@ public class Main {
         graph.newList(graph);
 
 
+        char letra1 = 'a';
+        char letra2 = 'b';
+        boolean respuesta = letra1<letra2;
+        System.out.println("respuesta "+respuesta);
+
 // Prompt the user to select the algorithms to run
         Scanner scanner = new Scanner(System.in);
         System.out.println("Seleccione los algoritmos que desea correr (separado con comas):");
@@ -27,6 +32,7 @@ public class Main {
         System.out.println("  8. Hill climbing (Manhattan distance)");
         System.out.println("  9. Hill climbing (Euclidean distance)");
         System.out.println("  10. Recursive Depth-first search (DFS))");
+       // System.out.println("  11.DFS con prioridad alfabetica");
 
 
 
@@ -84,6 +90,11 @@ public class Main {
                     System.out.println("\nEjecutando Depth-first search Recursive (DFS)...");
                     List<Node> dfsPathRecursive = GraphSearch.dfsRecursive(graph);
                     printPathAndVisitedNodes(dfsPathRecursive);
+                    break;
+                case "11":
+                    System.out.println("\nEjecutando DFS alfabetico");
+                    //List<Node> BFSAlphabetic = GraphSearch.searchWithPriorityAlphabet(graph);
+                    //printPathAndVisitedNodes(BFSAlphabetic);
                     break;
                 default:
                     System.out.println("\nSelección de algoritmo no permitido.");

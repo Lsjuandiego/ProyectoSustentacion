@@ -9,7 +9,6 @@ class GraphSearch {
      * @return
      */
     public static List<Node> search(Graph graph, boolean useQueue) {
-        int level = 0;
         Node start = graph.getStartNode();
         Node goal = graph.getGoalNode();
 
@@ -26,6 +25,8 @@ class GraphSearch {
             Node node = useQueue ? ((LinkedList<Node>) container).poll() : ((Stack<Node>) container).pop();
 
             if (node.equals(goal)) {
+                System.out.print(node.getName());
+                System.out.println();
                 System.out.println("Nivel y nodo de la respuesta es Nodo: " + node.getName() + ", Nivel: " + levelMap.get(node));
                 return getPath(start, goal, parents);
             }
@@ -33,7 +34,56 @@ class GraphSearch {
             if (!visited.contains(node) && !node.isWall()) {
 
                 visited.add(node);
+                System.out.print(node.getName()+",");
+                //System.out.println("Nodo: " + node.getName() + ", Nivel: " + levelMap.get(node));
 
+                for (Node neighbor : node.getNeighborsWithoutHeuristics()) {
+                    if (!visited.contains(neighbor) && !neighbor.isWall()) {
+
+                        parents.put(neighbor, node);
+                        container.add(neighbor);
+                        levelMap.put(neighbor, levelMap.get(node) + 1);
+
+                        // Condición de salida adicional
+                        if (levelMap.get(neighbor) > 100) {
+                            return null;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return null; // Camino no encontrado
+    }
+
+    public static List<Node> DFSAlphabetic(Graph graph) {
+        Node start = graph.getStartNode();
+        Node goal = graph.getGoalNode();
+
+        Collection<Node> container =  new Stack<>();
+        Set<Node> visited = new HashSet<>();
+        Map<Node, Node> parents = new HashMap<>();
+        Map<Node, Integer> levelMap = new HashMap<>();
+
+        // Agregar el nodo inicial a la estructura de datos apropiada
+        container.add(start);
+        levelMap.put(start, 0);
+
+        while (!container.isEmpty()) {
+            Node node = ((Stack<Node>) container).pop();
+
+            if (node.equals(goal)) {
+                System.out.print(node.getName());
+                System.out.println();
+                System.out.println("Nivel y nodo de la respuesta es Nodo: " + node.getName() + ", Nivel: " + levelMap.get(node));
+                return getPath(start, goal, parents);
+            }
+
+            if (!visited.contains(node) && !node.isWall()) {
+
+                visited.add(node);
+                System.out.print(node.getName()+",");
                 //System.out.println("Nodo: " + node.getName() + ", Nivel: " + levelMap.get(node));
 
                 for (Node neighbor : node.getNeighborsWithoutHeuristics()) {
